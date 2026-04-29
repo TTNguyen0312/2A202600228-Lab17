@@ -17,7 +17,7 @@
 - **Booking confirmation flow**: Hiển thị bác sĩ + slot khả dụng theo thời gian thực, bệnh nhân chọn và phải xác nhận lựa chọn của mình → test giả định: *bệnh nhân sẽ hoàn thành đặt lịch sau khi dùng AI và đến khám đúng slot*.
 
 **Out-of-Scope:**
-- Tích hợp dữ liệu sinh tồn từ wearable, thiết bị đo: Chưa cần để test core hypothesis về hội thoại tiếp nhận và điều phối, thêm độ phức tạp kỹ thuật và chi phí.
+- Tích hợp dữ liệu sinh tồn từ thiết bị wearable, thiết bị đo: Chưa cần để test core hypothesis về hội thoại tiếp nhận và điều phối, tích hợp sẽ tăng thêm độ phức tạp kỹ thuật và chi phí.
 - Upload kết quả xét nghiệm / OCR ảnh y tế: Không phải pain point của đa số ca khám ngoại trú lần đầu. Tuy nhiên, đây là một tính năng hay và có thể thu hút người dùng, bổ sung sau PMF.
 - Voice input / voice output tiếng Việt: Chưa cần thiết vì chỉ cần text-based là đủ để test hành vi.
 - AI đa ngôn ngữ: Chưa cần thiết để kiểm chứng hypothesis.
@@ -25,28 +25,28 @@
 - Thanh toán online + BHYT claim: Thuộc domain khác, không cần để test hypothesis.
 
 **Non-Goals:**
-- **Chẩn đoán bệnh**: Không đưa ra tên bệnh, không thay thế bác sĩ, không kê đơn. Đây là ranh giới pháp lý tuyệt đối.
-- **Triage cấp cứu độc lập**: Ca cấp cứu luôn được safety layer đẩy sang quy trình cấp cứu truyền thống, không để AI tự xử lý.
-- **Tự động đặt lịch không có bước xác nhận của bệnh nhân**: kể cả khi AI confidence 99%, bước confirm cuối vẫn bắt buộc.
-- **Bán data bệnh nhân hoặc dùng cho quảng cáo y tế.**
+- **Chẩn đoán bệnh**: Không đưa ra tên bệnh, không thay thế bác sĩ, không kê đơn. Đây là ranh giới tuyệt đối.
+- **Điều phối cấp cứu độc lập**: Ca cấp cứu luôn được safety layer đẩy sang quy trình cấp cứu truyền thống, không để AI tự xử lý.
+- **Tự động đặt lịch không có bước xác nhận của bệnh nhân**: Kể cả khi AI confidence 99%, bước confirm cuối của user sau khi gợi ý khoa và yêu cầu đặt lịch vẫn là bắt buộc.
+- **Bán data bệnh nhân hoặc dùng cho quảng cáo y tế.**: Dữ liệu khám chữa bệnh phải được bảo mật trong kho dữ liệu của bệnh viện.
 
 ---
 
 ## 2. PRD Skeleton
 
 ### Problem Statement
-> Bệnh nhân ngoại trú tuổi 18-60 đến bệnh viện công tuyến tỉnh/trung ương (>500 lượt/ngày) không biết mình nên khám khoa nào, phải dựa vào nhân viên tiếp nhận để phân khoa thủ công, dẫn đến thời gian chờ trung bình 147 phút/lần khám và 15–25% ca phải chuyển khoa giữa chừng, gây tốn thời gian bệnh nhân và quá tải nhân viên (BV Việt Đức: nhân viên làm 8–16 tiếng/ngày trong giờ cao điểm).
+> Bệnh nhân ngoại trú tuổi 18-60 đến bệnh viện công tuyến tỉnh/trung ương (>500 lượt/ngày [2], [3]) không biết mình nên khám khoa nào, phải dựa vào nhân viên tiếp nhận để phân khoa thủ công, dẫn đến thời gian chờ trung bình 147 phút/lần khám [1], [2] và 15–25% ca phải chuyển khoa giữa chừng [4], gây tốn thời gian bệnh nhân và quá tải nhân viên (BV Việt Đức: nhân viên làm 8–16 tiếng/ngày trong giờ cao điểm [1]).
 
 ### Target User
-> Bệnh nhân phổ thông tuổi 25–60, biết dùng smartphone, đến bệnh viện công tuyến tỉnh hoặc trung ương tại Việt Nam để khám ngoại trú với triệu chứng không rõ ràng, không biết tên chuyên khoa. (Nối trực tiếp từ Customer Segment Card Day 16.)
+> Bệnh nhân phổ thông tuổi 25–60, biết dùng smartphone, đến bệnh viện công tuyến tỉnh hoặc trung ương tại Việt Nam để khám ngoại trú với triệu chứng không rõ ràng, không biết tên chuyên khoa. (Từ Customer Segment Card Day 16.)
 
 ### User Stories
 
-**Story 1 (Happy path — bệnh nhân):**
-> As a bệnh nhân có triệu chứng mơ hồ (ví dụ đau bụng kèm mệt mỏi), I want mô tả bằng ngôn ngữ thường ngày qua chat và nhận được gợi ý khoa + bác sĩ + slot khả dụng trong dưới 5 phút, so that tôi đi thẳng đến đúng phòng khám ngay lần đầu, không phải xếp hàng phân khoa thủ công và không bị chuyển khoa giữa chừng.
+**Story 1 (Happy path - bệnh nhân):**
+> Là một bệnh nhân có triệu chứng mơ hồ (ví dụ đau bụng kèm mệt mỏi), tôi muốn mô tả bằng ngôn ngữ thường ngày qua chat và nhận được gợi ý khoa + bác sĩ + slot khả dụng trong dưới 5 phút, để tôi có thể đi thẳng đến đúng phòng khám ngay lần đầu, không phải xếp hàng phân khoa thủ công và không bị chuyển khoa giữa chừng.
 
-**Story 2 (Escalation path — nhân viên tiếp nhận):**
-> As a nhân viên tiếp nhận tại khoa khám ngoại trú, I want chỉ tiếp nhận các ca AI không tự tin sau 3 vòng hội thoại, kèm toàn bộ transcript + lý do escalate, so that tôi tập trung thời gian vào ca phức tạp thật sự và không phải hỏi lại bệnh nhân từ đầu.
+**Story 2 (Escalation path - nhân viên tiếp nhận):**
+> Là một nhân viên tiếp nhận tại khoa khám ngoại trú, tôi muốn chỉ tiếp nhận các ca AI không tự tin sau 3 vòng hội thoại, kèm toàn bộ transcript + lý do escalate, để tôi có thể tập trung thời gian vào ca phức tạp thật sự và không phải hỏi lại bệnh nhân từ đầu.
 
 ### AI-Specific
 
@@ -54,28 +54,28 @@
 
 Kiến trúc 2 giai đoạn để cân bằng speed-to-market và moat:
 
-- **Giai đoạn 1 (tháng 1–6) — GPT-4o làm reasoning engine cho triage hội thoại.**
-  - Lý do chọn: tiếng Việt chất lượng cao, multi-turn reasoning tốt, latency <3s, chi phí $0.02–0.04/phiên chấp nhận được cho pilot.
+- **Giai đoạn 1 (6 tháng đầu): GPT-4o làm reasoning engine cho chatbot.**
+  - Lý do chọn: tiếng Việt chất lượng cao, multi-turn reasoning tốt, latency <3s, chi phí $0.02–0.04/phiên chấp nhận được.
   - Tất cả hội thoại được log cấu trúc (triệu chứng → gợi ý AI → khoa confirm) để chuẩn bị dataset fine-tune.
-- **Giai đoạn 2 (từ tháng 6+) — Fine-tuned Qwen 2.5 7B hoặc Llama 3.1 8B.**
-  - Lý do chuyển: khi có ~10k hội thoại confirmed, fine-tune cho kết quả tốt hơn và rẻ hơn (~$3–5k/tháng vs $12–24k/tháng ở volume 600k call/tháng).
-  - Fine-tune với LoRA/QLoRA, chi phí training ~$500–$2k/vòng.
+- **Giai đoạn 2 (từ tháng 6+): Fine-tuned Qwen 2.5 7B hoặc Llama 3.1 8B.**
+  - Lý do chuyển: khi có ~10k hội thoại confirmed, fine-tune cho kết quả tốt hơn và không tốn phí do tự host model.
+  - Tái fine-tune model định kì hằng tháng với dữ liệu mới
   - GPT-4o giữ làm fallback cho edge case.
-- **Safety rule layer** (độc lập cả 2 giai đoạn) — keyword matching nhận diện red flag cấp cứu (đau ngực dữ dội, khó thở cấp, liệt nửa người, mất ý thức), chạy trước LLM.
+- **Safety rule layer** (độc lập cả 2 giai đoạn): Keyword matching nhận diện red flag cấp cứu (đau ngực dữ dội, khó thở cấp, liệt nửa người, mất ý thức), chạy trước LLM.
 
 **Trade-offs chấp nhận:**
 - Giai đoạn 1: chi phí cao hơn để có speed-to-market.
-- Giai đoạn 2: đầu tư GPU/hạ tầng (~$15–25k CapEx hoặc $3–5k/tháng OpEx) để có moat và giảm marginal cost dài hạn.
+- Giai đoạn 2: đầu tư GPU/hạ tầng để có moat và giảm chi phí token dài hạn, đồng thời áp dụng được data flywheel.
 
 **Trade-offs không chấp nhận:**
-- Không dùng API của OpenAI cho bệnh viện có yêu cầu data residency (data không được ra khỏi VN/OpenAI server ở Mỹ) — bệnh viện này chỉ tiếp cận ở Giai đoạn 2.
-- Không chấp nhận latency >5s cho phản hồi triage.
-- Không fine-tune model để chẩn đoán bệnh — chỉ fine-tune cho bài toán phân khoa.
+- Không dùng API của OpenAI cho bệnh viện có yêu cầu data residency (data không được ra khỏi Việt Nam), bệnh viện này chỉ tiếp cận ở Giai đoạn 2.
+- Không chấp nhận latency >5s cho phản hồi.
+- Không fine-tune model để chẩn đoán bệnh, chỉ fine-tune cho bài toán phân khoa.
 
 **Data Requirements:**
-- **Nguồn 1 — Cấu trúc khoa + bác sĩ + slot lịch khám:** lấy từ HIS của bệnh viện pilot qua REST API. Owner: Phòng CNTT bệnh viện. Update: real-time cho slot, weekly cho doctor roster.
-- **Nguồn 2 — Symptom-to-specialty mapping:** xây thủ công từ Quyết định 1313/QĐ-BYT + tư vấn 2–3 bác sĩ chuyên khoa. Owner: team MedRoute. Update: static, review mỗi quý.
-- **Nguồn 3 — Correction signal (tâm điểm của flywheel):** thu thập passively từ hội thoại bệnh nhân — reject gợi ý, adjust giữa chừng, confirm đặt lịch, không đổi khoa trong 7 ngày. Owner: MedRoute. Update: real-time log, aggregate weekly cho retraining.
+- **Nguồn 1 - Cấu trúc khoa + bác sĩ + slot lịch khám:** lấy từ HIS của bệnh viện pilot qua REST API. Owner: Phòng CNTT bệnh viện. Update real-time cho các slot, daily cho nguồn bác sĩ.
+- **Nguồn 2 - Symptom-to-specialty mapping:** xây thủ công từ Quyết định 1313/QĐ-BYT + tư vấn 2-3 bác sĩ chuyên khoa. Owner: team phát triển. Update: static, review mỗi quý.
+- **Nguồn 3 - Correction signal (tâm điểm của flywheel):** thu thập thụ động từ hội thoại bệnh nhân khi reject gợi ý, adjust giữa chừng, confirm đặt lịch, không đổi khoa trong 7 ngày. Owner: team phát triển dự án. Update: real-time log, tái train hằng tháng.
 - **Rủi ro data quality:** (1) bệnh nhân nhập sai/đùa → mitigate bằng input validation + red flag detection; (2) HIS schema khác nhau giữa các bệnh viện → xây adapter layer cho top 3 HIS phổ biến (VinaHIS, FPT eHospital, tự phát triển).
 
 **Fallback UX:**
@@ -84,39 +84,39 @@ Chiến lược: **Graceful Handover** (rủi ro y tế = cao). Kèm Human-in-th
 
 - **Trigger:** (1) Sau 3 vòng hội thoại mà confidence < 70%; HOẶC (2) Safety rule layer phát hiện red flag cấp cứu; HOẶC (3) Bệnh nhân phản hồi "gợi ý sai" 2 lần liên tiếp; HOẶC (4) LLM response chứa pattern uncertainty ("không chắc", "có thể là...", "cần kiểm tra thêm").
 - **Hành động của hệ thống:**
-  - Nếu trigger (2) cấp cứu: hiển thị full-screen cảnh báo màu đỏ "Triệu chứng của bạn có thể cần cấp cứu — vui lòng đến ngay khoa Cấp cứu hoặc gọi 115", kèm nút gọi trực tiếp.
+  - Nếu trigger (2) cấp cứu: hiển thị full-screen cảnh báo màu đỏ "Triệu chứng của bạn có thể cần cấp cứu, vui lòng đến ngay khoa Cấp cứu hoặc gọi 115", kèm nút gọi trực tiếp.
   - Nếu trigger (1), (3), (4): hiển thị message "Để nhân viên hỗ trợ bạn chính xác hơn" → chuyển toàn bộ transcript + lý do escalate sang dashboard nhân viên tiếp nhận → bệnh nhân nhận số thứ tự ưu tiên.
 - **User options:**
-  - Tại mọi thời điểm, bệnh nhân có nút "Tôi muốn gặp nhân viên" — override AI.
-  - Sau khi AI gợi ý khoa, bệnh nhân có thể chọn "Đúng rồi" → book, hoặc "Không đúng" → AI hỏi thêm, hoặc "Cho tôi gặp nhân viên" → escalate.
+  - Tại mọi thời điểm, bệnh nhân có nút "Tôi muốn gặp nhân viên" để override AI.
+  - Sau khi AI gợi ý khoa, bệnh nhân có thể chọn "Đúng rồi" để book, hoặc "Không đúng" để AI hỏi thêm, hoặc "Cho tôi gặp nhân viên" để escalate.
 - **Override:** Có. Bệnh nhân luôn là người ra quyết định cuối.
 
 ### Success Metrics
-- **Primary metric:** *Triage-to-correct-visit rate* — % bệnh nhân hoàn thành triage → đặt lịch → khám đúng slot đã chọn, không đổi khoa trong 7 ngày.
+- **Primary metric:** *Triage-to-correct-visit rate* - % bệnh nhân hoàn thành sàng lọc → đặt lịch → khám đúng slot đã chọn, không đổi khoa trong 7 ngày.
 - **Ngưỡng thành công:** ≥ 40% trong tháng thứ 3 pilot; ≥ 60% trong tháng thứ 6.
 - **Timeframe đo lường:** đo weekly, review monthly, gate quarterly.
 - **Secondary metrics:** escalation rate (target: 15–25%, không quá cao không quá thấp), median triage session length (target: <5 phút), patient return rate trong 90 ngày (target: ≥ 25%).
 
 ### Dependencies & Constraints
-- **API integration:** HIS của bệnh viện pilot (tối thiểu đọc được doctor schedule và ghi được appointment). Timeline: 4–6 tuần cho pilot đầu.
+- **API integration:** HIS của bệnh viện pilot (tối thiểu đọc được doctor schedule và ghi được appointment). Timeline: 4-6 tuần cho pilot đầu.
 - **LLM provider:** OpenAI API cho Giai đoạn 1; self-hosted GPU infrastructure cho Giai đoạn 2 (cần chuẩn bị từ tháng 4).
 - **Timeline constraint:** 3 bệnh viện pilot trong 6 tháng đầu; signed contract với ít nhất 1 bệnh viện trước khi launch MVP.
 - **Budget constraint:** $80k cho 6 tháng đầu (team + infra + GPT-4o API). Nếu conversion pilot → paid <30% sau 6 tháng, re-evaluate strategy.
-- **Legal / Compliance:** (1) Luật KCB 2023 — MedRoute phải positioning là "tư vấn điều phối", không phải "phần mềm chẩn đoán y tế"; (2) Thu thập consent rõ ràng từ bệnh nhân cho việc log hội thoại; (3) Data không được bán hoặc share ngoài mục đích cải thiện triage.
+- **Legal / Compliance:** (1) Luật KCB 2023 - MedRoute phải positioning là "tư vấn điều phối", không phải "phần mềm chẩn đoán y tế"; (2) Thu thập consent rõ ràng từ bệnh nhân cho việc log hội thoại; (3) Data không được bán hoặc share ngoài mục đích cải thiện triage.
 
 ---
 
 ## 3. Hypothesis Table
 
-### Hypothesis 1 — Cho tính năng "Agent hội thoại triage đa vòng"
+### Hypothesis 1 — Cho tính năng "Agent hội thoại điều phối đa vòng"
 > "Chúng tôi tin rằng **cung cấp một agent hội thoại tiếng Việt hỏi triệu chứng đa vòng tại bệnh viện công** sẽ giúp **bệnh nhân ngoại trú tuổi 25–60** đạt được **phân khoa đúng ngay lần đầu mà không cần qua bàn phân khoa thủ công.**
 > Chúng tôi sẽ biết mình đúng khi thấy **triage-to-correct-visit rate** đạt **≥ 40%** trong **tháng thứ 3 pilot** (đo per-hospital-deployment)."
 
 **Riskiest assumption:** Bệnh nhân sẵn sàng hoàn thành hội thoại 3–5 vòng với AI thay vì bỏ giữa chừng hoặc chọn gặp nhân viên ngay từ đầu.
 
-**Cách test cheapest:** Wizard-of-Oz test — 1 tuần tại khu vực chờ của 1 bệnh viện, đưa cho 50 bệnh nhân iPad có giao diện MedRoute, nhưng thực tế người vận hành là 1 y tá ngồi phòng sau trả lời như AI. Đo: tỷ lệ hoàn thành hội thoại, số vòng trung bình, và phản hồi sau khi có gợi ý khoa. Chi phí: <$500, thời gian: 1 tuần.
+**Cách test rẻ nhất:** Wizard-of-Oz test - 1 tuần tại khu vực chờ của 1 bệnh viện, đưa cho 50 bệnh nhân iPad có giao diện hệ yhoodng, nhưng thực tế người vận hành là 1 y tá ngồi phòng sau trả lời như AI. Đo: tỷ lệ hoàn thành hội thoại, số vòng trung bình, và phản hồi sau khi có gợi ý khoa. Chi phí: <$500, thời gian: 1 tuần.
 
-### Hypothesis 2 — Cho tính năng "Escalation flow"
+### Hypothesis 2 - Cho tính năng "Escalation flow"
 > "Chúng tôi tin rằng **tự động chuyển transcript sang nhân viên khi AI confidence thấp** sẽ giúp **nhân viên tiếp nhận** đạt được **giảm 50%+ thời gian xử lý mỗi ca** (vì không phải hỏi bệnh nhân từ đầu).
 > Chúng tôi sẽ biết mình đúng khi thấy **thời gian trung bình nhân viên xử lý 1 ca escalated** giảm từ baseline ~8–10 phút xuống **≤ 5 phút** trong **4 tuần đầu pilot**."
 
@@ -124,7 +124,7 @@ Chiến lược: **Graceful Handover** (rủi ro y tế = cao). Kèm Human-in-th
 
 **Cách test cheapest:** Chạy pilot 2 tuần tại 1 phòng tiếp nhận với 3 nhân viên. So sánh thời gian xử lý ca có transcript (n=30) và ca không có transcript (n=30). Phỏng vấn nhân viên sau pilot: họ đọc transcript bao nhiêu %, có tin không, nếu không thì vì sao. Chi phí: ~$200 thời gian PM, 2 tuần.
 
-### Hypothesis 3 — Cho tính năng "Booking confirmation flow"
+### Hypothesis 3 - Cho tính năng "Booking confirmation flow"
 > "Chúng tôi tin rằng **hiển thị doctor + slot khả dụng ngay sau gợi ý khoa** sẽ giúp **bệnh nhân** đạt được **hoàn thành đặt lịch trong cùng session triage** (không bỏ dở).
 > Chúng tôi sẽ biết mình đúng khi thấy **booking completion rate** đạt **≥ 65%** (trong tổng số bệnh nhân đã hoàn thành triage) trong **tháng đầu pilot**."
 
@@ -180,9 +180,17 @@ Chiến lược: **Graceful Handover** (rủi ro y tế = cao). Kèm Human-in-th
 
 **Mắt xích nào trong [MVP Boundary → PRD → Hypothesis → PMF] bạn đang yếu nhất?**
 
-> Hypothesis testing — cụ thể là khâu "cách test cheapest". Mình viết được Wizard-of-Oz test, nhưng chưa thực sự chạy thử để biết con số baseline (tỷ lệ bệnh nhân VN sẵn sàng chat với AI là bao nhiêu thực tế?). Nếu không có baseline, khó biết ngưỡng 40% triage-to-correct-visit là cao hay thấp so với thị trường. Cần ít nhất 1 tuần Wizard-of-Oz trước khi code bất cứ thứ gì. MVP Boundary và PRD đang ở mức ổn. PMF Scorecard tự tin nhất vì đã có đủ 3 method cover các góc khác nhau.
+> Hypothesis testing, cụ thể là khâu "cách test rẻ nhất". Mình viết được Wizard-of-Oz test, nhưng chưa thực sự chạy thử để biết con số baseline (tỷ lệ bệnh nhân VN sẵn sàng chat với AI là bao nhiêu thực tế?). Nếu không có baseline, khó biết ngưỡng 40% triage-to-correct-visit là cao hay thấp so với thị trường. Cần ít nhất 1 tuần Wizard-of-Oz trước khi code bất cứ thứ gì. MVP Boundary và PRD đang ở mức ổn. PMF Scorecard tự tin nhất vì đã có đủ 3 method cover các góc khác nhau.
 
-**Open questions muốn giải đáp tiếp:**
-1. Wizard-of-Oz test nên chạy ở bệnh viện công hay tư trước? Bệnh nhân tư có thể sẵn sàng chat AI hơn, nhưng đó không phải target segment — dễ nhận false positive signal.
-2. Nếu Hypothesis 1 (bệnh nhân chat với AI) fail ở Wizard-of-Oz, có nên pivot sang kiosk self-service dạng form (không hội thoại) thay vì từ bỏ ý tưởng? Cần chuẩn bị plan B trước khi test.
-3. Khi fine-tune Qwen 7B ở Giai đoạn 2, nên fine-tune một model chung cho mọi bệnh viện hay LoRA adapter riêng cho từng bệnh viện? Trade-off giữa consistency và customization chưa giải quyết.
+---
+
+## References
+
+[1] T. D. Tran, U. V. Nguyen, V. M. Nong, and B. X. Tran, "Patient waiting time in the outpatient clinic at a central surgical hospital of Vietnam: Implications for resource allocation," *F1000Research*, vol. 6, p. 454, 2017, doi: 10.12688/f1000research.11045.3.
+
+[2] S. T. T. Nguyen, E. Yamamoto, M. T. N. Nguyen, H. B. Le, T. Kariya, Y. M. Saw, C. D. Nguyen, and N. Hamajima, "Waiting time in the outpatient clinic at a national hospital in Vietnam," *Nagoya Journal of Medical Science*, vol. 80, no. 2, pp. 227–239, 2018, doi: 10.18999/nagjms.80.2.227.
+
+[3] D.-H. Nguyen, D.-V. Tran, H.-L. Vo, H. N. S. Anh, T.-N.-H. Doan, and T.-H.-T. Nguyen, "Outpatient waiting time at Vietnam health facilities: Policy implications for medical examination procedure," *Healthcare*, vol. 8, no. 1, p. 63, 2020, doi: 10.3390/healthcare8010063.
+
+[4] K. Nguyen and A. W. Taylor-Robinson, "Vietnam's evolving healthcare system: Notable successes and significant challenges," *Cureus*, vol. 15, no. 6, p. e40414, Jun. 2023, doi: 10.7759/cureus.40414.
+
